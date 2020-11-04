@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.77.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>坑人的 SimpleDateFormat&nbsp;&ndash;&nbsp;My New Hugo Site</title><link rel="stylesheet" href="/css/core.min.c248b0a63e69fc1234551d012273899b87baf2edca5d216d0392fd17e6f8f338d0f544da0b4ef46e01d2a3289df4c097.css" integrity="sha384-wkiwpj5p/BI0VR0BInOJm4e68u3KXSFtA5L9F&#43;b48zjQ9UTaC070bgHSoyid9MCX"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="坑人的 SimpleDateFormat" /><body><section id="header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><span class="site name">My New Hugo Site</span></a></span>
+        <span class="header right-side"></span></div></section><section id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">坑人的 SimpleDateFormat</h1><p class="article date">2020-10-28</p></section><article class="article markdown-body"><h1 id="坑人的-simpledateformat">坑人的 <code>SimpleDateFormat</code></h1>
+<hr>
+<h2 id="怎么被-simpledateformat-坑了">怎么被 <code>SimpleDateFormat</code> 坑了</h2>
+<p>由于项目使用了 <code>SimpleDateFormat</code> 类，在实际生产环境运行中，遭遇了数据库中本来存储正确的日期字段值被后端提取出来用了个错误的模板来转换并反馈到前端，并且后端程序并没有报错……一如正常地运行，但是前端显示内容就不正常了……比如应该是 <code>2020-10-26 21:30:03</code>，而前端却显示的 <code>2019-10-30 22:06:21</code>，这很明显有问题。（前端：你后端咋传的，我就咋显示）</p>
+<p>起初以为是后端代码的其他地方错误地更新了时间数据，结果排了一天的代码逻辑（我是中途参与这个项目，且这个项目有多人参与，代码风格十分的多元化），发现是 <code>SimpleDateFormat</code> 这个类的 <code>parse</code> 方法存在一个特殊的用户：阿拉伯语言国家。</p>
+<h3 id="怎么错了">怎么错了：</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">SimpleDateFormat formatNoHyphen <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyyMMddHHmmss&#34;</span><span style="color:#f92672">);</span>
+Date dateText3 <span style="color:#f92672">=</span> formatNoHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2020-10-26 21:30:03&#34;</span><span style="color:#f92672">);</span>
+</code></pre></div><p>这个代码，在程序员表面上逻辑，应该是会报错的。但实际的代码逻辑上是可行的……</p>
+<h3 id="为什么错了">为什么错了：</h3>
+<p>下图是 <code>SimpleDateFormat</code> 类的源代码注释内容：</p>
+<p><img  src="https://quentinhsu.github.io/post-images/1603937225343.png"
+        alt/></p>
+<p><em>In Arabic, a minus sign for a negative number is put after the number.</em></p>
+<p><strong>在阿拉伯语中，负数的减号会放在数字后面。</strong></p>
+<p>因此 <code>SimpleDateFormat</code> 无法确定传入值中的 <code>-</code>，到底是作为一个减号，还是一个分隔符。</p>
+<p>不信的话，你可以使用下述代码测试下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> java.text.ParseException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.text.SimpleDateFormat<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.util.Date<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.util.concurrent.TimeUnit<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleDateFormatTest</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> ParseException <span style="color:#f92672">{</span>
+
+        SimpleDateFormat formatHyphen <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyy-MM-ddHH:mm:ss&#34;</span><span style="color:#f92672">);</span>
+        SimpleDateFormat formatNoHyphen <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyyMMddHHmmss&#34;</span><span style="color:#f92672">);</span>
+        Date dateText1 <span style="color:#f92672">=</span> formatHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2020-10-26 21:30:03&#34;</span><span style="color:#f92672">);</span>
+        Date dateText2 <span style="color:#f92672">=</span> formatNoHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;20201026213003&#34;</span><span style="color:#f92672">);</span>
+        Date dateText3 <span style="color:#f92672">=</span> formatNoHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2020-10-26 21:30:03&#34;</span><span style="color:#f92672">);</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText1 = &#34;</span> <span style="color:#f92672">+</span> formatHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText1<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText2 = &#34;</span> <span style="color:#f92672">+</span> formatHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText2<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText3 = &#34;</span> <span style="color:#f92672">+</span> formatHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText3<span style="color:#f92672">));</span>
+</code></pre></div><p>因为阿拉伯语言国家的特殊情况，上述代码块中的 <code>dateText3</code> 将会被成功赋值，但得到的值是个错误的值（<code>2019-10-30 22:06:21</code>）。<strong>该情况不会报错。</strong></p>
+<p>（天坑啊！你为啥不报错！你明明（在非阿拉伯语国家里）就是个错误啊！哭唧唧~）</p>
+<p>几经查询和请教，打算以后使用 <code>DateTimeFormatter</code>，并且 <code>DateTimeFormatter</code> 的线程是安全的，而 <code>SimpleDateFormat</code> 的线程是不安全的。</p>
+<h2 id="可靠的-datetimeformatter">可靠的 <code>DateTimeFormatter</code></h2>
+<p>接下来的代码，将使用 <code>DateTimeFormatter</code> 进行时间转换</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> java.time.LocalDateTime<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.time.format.DateTimeFormatter<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DateTimeFormatterTest</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        DateTimeFormatter formatterHyphen <span style="color:#f92672">=</span> DateTimeFormatter<span style="color:#f92672">.</span><span style="color:#a6e22e">ofPattern</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyy-MM-dd HH:mm:ss&#34;</span><span style="color:#f92672">);</span>
+        DateTimeFormatter formatterNoHyphen <span style="color:#f92672">=</span> DateTimeFormatter<span style="color:#f92672">.</span><span style="color:#a6e22e">ofPattern</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyyMMddHHmmss&#34;</span><span style="color:#f92672">);</span>
+        LocalDateTime dateText1 <span style="color:#f92672">=</span> LocalDateTime<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2020-10-26 21:30:03&#34;</span><span style="color:#f92672">,</span> formatterHyphen<span style="color:#f92672">);</span>
+        LocalDateTime dateText2 <span style="color:#f92672">=</span> LocalDateTime<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;20201026213003&#34;</span><span style="color:#f92672">,</span> formatterNoHyphen<span style="color:#f92672">);</span>
+        LocalDateTime dateText3 <span style="color:#f92672">=</span> LocalDateTime<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2020-10-26 21:30:03&#34;</span><span style="color:#f92672">,</span> formatterNoHyphen<span style="color:#f92672">);</span>
+
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText1 = &#34;</span> <span style="color:#f92672">+</span> formatterHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText1<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText2 = &#34;</span> <span style="color:#f92672">+</span> formatterHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText2<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dateText3 = &#34;</span> <span style="color:#f92672">+</span> formatterHyphen<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>dateText3<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上述代码，运行时将会报错，因为 <code>LocalDateTime.parse(&quot;2020-10-26 21:30:03&quot;, formatterNoHyphen)</code> 中传入的值 <code>2020-10-26 21:30:03</code>，跟 <code>formatterNoHyphen</code> 定义的格式不一致。</p>
+<blockquote>
+<p>Exception in thread &ldquo;main&rdquo; java.time.format.DateTimeParseException: Text &lsquo;2020-10-26 21:30:03&rsquo; could not be parsed at index 4</p>
+<p>at java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:1949)</p>
+<p>at java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1851)</p>
+<p>at java.time.LocalDateTime.parse(LocalDateTime.java:492)</p>
+<p>at DateTimeFormatterTest.main(DateTimeFormatterTest.java:10)</p>
+</blockquote>
+<p>有了这个错误，就再也不怕因为格式转换模板变量写错而转换出一个诡异的时间了，却不能第一时间知道哪里出现了这个问题。</p>
+<p>假如使用 <code>SimpleDateFormat</code>，没报错，同时不知道之前 <code>SimpleDateFormat</code> 有个阿拉伯语国家的特殊情况，第一时间真的不知道去哪排错。</p>
+<h2 id="解决方案">解决方案</h2>
+<ol>
+<li>
+<p><strong>将 <code>SimpleDateFormat</code> 替换为 <code>DateTimeFormatter</code></strong></p>
+<p>永绝后患的方式，就是用 <code>DateTimeFormatter</code>。</p>
+<p>因为你在本地测试是很可能就会报错，哪怕是本地没测的全面，但一旦有问题，看报错也能很快的确定问题。</p>
+</li>
+<li>
+<p><strong>严谨的使用 <code>SimpleDateFormat</code> 对时间的转换</strong></p>
+<p>（其实是祖传代码，不能动，也不敢动……🐶）</p>
+<p>每次使用 <code>SimpleDateFormat</code>，尽可能地细心对照每个传入传出的参数数据格式。若是有开发文档，就更好对照和排查了！</p>
+</li>
+</ol>
+</article><section class="article labels"><a class="tag" href=/tags/java/>Java</a><a class="tag" href=/tags/date/>Date</a></section>
+</div>
+<div class="article bottom"></div></section><section id="footer"><div class="footer-wrap">
+    <p class="copyright">My New Hugo Site</p>
+    <p class="powerby"><span>Powered&nbsp;by&nbsp;</span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span>&nbsp;&amp;&nbsp;</span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p></div></section></body>
+
+</html>

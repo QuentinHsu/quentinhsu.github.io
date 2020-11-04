@@ -1,0 +1,116 @@
+---
+title: "坑人的 SimpleDateFormat"
+date: 2020-10-28T23:34:05
+weight: 1
+aliases: ["/first"]
+tags: ["Java","Date"]
+author: "Me"
+---
+# 坑人的 `SimpleDateFormat`
+---
+## 怎么被 `SimpleDateFormat` 坑了
+
+由于项目使用了 `SimpleDateFormat` 类，在实际生产环境运行中，遭遇了数据库中本来存储正确的日期字段值被后端提取出来用了个错误的模板来转换并反馈到前端，并且后端程序并没有报错……一如正常地运行，但是前端显示内容就不正常了……比如应该是 `2020-10-26 21:30:03`，而前端却显示的 `2019-10-30 22:06:21`，这很明显有问题。（前端：你后端咋传的，我就咋显示）
+
+起初以为是后端代码的其他地方错误地更新了时间数据，结果排了一天的代码逻辑（我是中途参与这个项目，且这个项目有多人参与，代码风格十分的多元化），发现是 `SimpleDateFormat` 这个类的 `parse` 方法存在一个特殊的用户：阿拉伯语言国家。
+
+### 怎么错了：
+
+```java
+SimpleDateFormat formatNoHyphen = new SimpleDateFormat("yyyyMMddHHmmss");
+Date dateText3 = formatNoHyphen.parse("2020-10-26 21:30:03");
+```
+
+这个代码，在程序员表面上逻辑，应该是会报错的。但实际的代码逻辑上是可行的……
+
+### 为什么错了：
+
+下图是 `SimpleDateFormat` 类的源代码注释内容：
+
+![](https://quentinhsu.github.io/post-images/1603937225343.png)
+
+*In Arabic, a minus sign for a negative number is put after the number.*
+
+**在阿拉伯语中，负数的减号会放在数字后面。**
+
+因此 `SimpleDateFormat` 无法确定传入值中的 `-`，到底是作为一个减号，还是一个分隔符。
+
+不信的话，你可以使用下述代码测试下：
+
+```java
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class SimpleDateFormatTest {
+    public static void main(String[] args) throws ParseException {
+
+        SimpleDateFormat formatHyphen = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+        SimpleDateFormat formatNoHyphen = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date dateText1 = formatHyphen.parse("2020-10-26 21:30:03");
+        Date dateText2 = formatNoHyphen.parse("20201026213003");
+        Date dateText3 = formatNoHyphen.parse("2020-10-26 21:30:03");
+        System.out.println("dateText1 = " + formatHyphen.format(dateText1));
+        System.out.println("dateText2 = " + formatHyphen.format(dateText2));
+        System.out.println("dateText3 = " + formatHyphen.format(dateText3));
+```
+
+因为阿拉伯语言国家的特殊情况，上述代码块中的 `dateText3` 将会被成功赋值，但得到的值是个错误的值（`2019-10-30 22:06:21`）。**该情况不会报错。**
+
+ （天坑啊！你为啥不报错！你明明（在非阿拉伯语国家里）就是个错误啊！哭唧唧~）
+
+几经查询和请教，打算以后使用 `DateTimeFormatter`，并且 `DateTimeFormatter` 的线程是安全的，而 `SimpleDateFormat` 的线程是不安全的。
+
+## 可靠的 `DateTimeFormatter`
+
+接下来的代码，将使用 `DateTimeFormatter` 进行时间转换
+
+```java
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeFormatterTest {
+    public static void main(String[] args) {
+        DateTimeFormatter formatterHyphen = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatterNoHyphen = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime dateText1 = LocalDateTime.parse("2020-10-26 21:30:03", formatterHyphen);
+        LocalDateTime dateText2 = LocalDateTime.parse("20201026213003", formatterNoHyphen);
+        LocalDateTime dateText3 = LocalDateTime.parse("2020-10-26 21:30:03", formatterNoHyphen);
+
+        System.out.println("dateText1 = " + formatterHyphen.format(dateText1));
+        System.out.println("dateText2 = " + formatterHyphen.format(dateText2));
+        System.out.println("dateText3 = " + formatterHyphen.format(dateText3));
+    }
+}
+```
+
+上述代码，运行时将会报错，因为 `LocalDateTime.parse("2020-10-26 21:30:03", formatterNoHyphen)` 中传入的值 `2020-10-26 21:30:03`，跟 `formatterNoHyphen` 定义的格式不一致。
+
+> Exception in thread "main" java.time.format.DateTimeParseException: Text '2020-10-26 21:30:03' could not be parsed at index 4
+>
+> at java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:1949)
+>
+> at java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1851)
+>
+> at java.time.LocalDateTime.parse(LocalDateTime.java:492)
+>
+> at DateTimeFormatterTest.main(DateTimeFormatterTest.java:10)
+
+有了这个错误，就再也不怕因为格式转换模板变量写错而转换出一个诡异的时间了，却不能第一时间知道哪里出现了这个问题。
+
+假如使用 `SimpleDateFormat`，没报错，同时不知道之前 `SimpleDateFormat` 有个阿拉伯语国家的特殊情况，第一时间真的不知道去哪排错。
+
+## 解决方案
+
+1. **将 `SimpleDateFormat` 替换为 `DateTimeFormatter`**
+
+    永绝后患的方式，就是用 `DateTimeFormatter`。
+
+    因为你在本地测试是很可能就会报错，哪怕是本地没测的全面，但一旦有问题，看报错也能很快的确定问题。
+
+2. **严谨的使用 `SimpleDateFormat` 对时间的转换**
+
+    （其实是祖传代码，不能动，也不敢动……🐶）
+
+    每次使用 `SimpleDateFormat`，尽可能地细心对照每个传入传出的参数数据格式。若是有开发文档，就更好对照和排查了！
