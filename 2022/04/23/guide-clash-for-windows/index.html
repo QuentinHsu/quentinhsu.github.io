@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[Guide] Clash for Windows | Xu Quentin Yang's Blog</title><meta name="keywords" content="network,proxy,clash,config"><meta name="author" content="Xu Quentin Yang"><meta name="copyright" content="Xu Quentin Yang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Clash for Windows GitHub Documentation  配置mixin基本配置： 123456789101112131415161718192021222324mixin: # object  dns:    enable: true    ipv6: false # default is false    # listen: 0.0.0.0:53    enhanced-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Guide] Clash for Windows">
+<meta property="og:url" content="https://quentinhsu.github.io/2022/04/23/guide-clash-for-windows/index.html">
+<meta property="og:site_name" content="Xu Quentin Yang&#39;s Blog">
+<meta property="og:description" content="Clash for Windows GitHub Documentation  配置mixin基本配置： 123456789101112131415161718192021222324mixin: # object  dns:    enable: true    ipv6: false # default is false    # listen: 0.0.0.0:53    enhanced-">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png">
+<meta property="article:published_time" content="2022-04-23T00:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-15T07:11:03.334Z">
+<meta property="article:author" content="Xu Quentin Yang">
+<meta property="article:tag" content="network">
+<meta property="article:tag" content="proxy">
+<meta property="article:tag" content="clash">
+<meta property="article:tag" content="config">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png"><link rel="shortcut icon" href="/images/blog-info/favicon.png"><link rel="canonical" href="https://quentinhsu.github.io/2022/04/23/guide-clash-for-windows/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离上次更新已经过了","messageNext":"天，文章所述内容可能已过时，请留意。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[Guide] Clash for Windows',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-15 07:11:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/blog-info/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Xu Quentin Yang's Blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[Guide] Clash for Windows</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-15T07:11:03.334Z" title="更新于 2022-08-15 07:11:03">2022-08-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[Guide] Clash for Windows"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Clash-for-Windows"><a href="#Clash-for-Windows" class="headerlink" title="Clash for Windows"></a>Clash for Windows</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Fndroid/clash_for_windows_pkg">GitHub</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.cfw.lbyczf.com/">Documentation</a></li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="mixin"><a href="#mixin" class="headerlink" title="mixin"></a>mixin</h3><p>基本配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mixin: # object</span><br><span class="line">  dns:</span><br><span class="line">    enable: true</span><br><span class="line">    ipv6: false # default is false</span><br><span class="line">    # listen: 0.0.0.0:53</span><br><span class="line">    enhanced-mode: redir-host</span><br><span class="line">    nameserver:</span><br><span class="line">      - https://dns.alidns.com/dns-query</span><br><span class="line">    fallback:</span><br><span class="line">      - https:/********.d.adguard-dns.com/dns-query</span><br><span class="line">    fallback-filter:</span><br><span class="line">      geoip: true</span><br><span class="line">      geoip-code: CN</span><br><span class="line">      ipcidr:</span><br><span class="line">        - 240.0.0.0/4</span><br><span class="line">  tun:</span><br><span class="line">    enable: true</span><br><span class="line">    stack: system</span><br><span class="line">    dns-hijack: # DNS 劫持</span><br><span class="line">      - any:53</span><br><span class="line">      # - 1.1.1.1</span><br><span class="line">      # - 114.114.114.114</span><br><span class="line">    auto-route: true</span><br><span class="line">    auto-detect-interface: true</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>dns.listen 在使用 TUN 模式时，可以不配置。</p>
+</li>
+<li><p>tun.</p>
+<ul>
+<li><p>dns-hijack</p>
+<ul>
+<li><p><code>any:53</code>，亦可直接 <code>any</code>。</p>
+<p>在 Clash Premium 2022.04.17 版本中支持该选项。以直接劫持所有的系统 DNS，并直接有 Clash 中配置的 DNS 接管。</p>
+</li>
+<li><p>1.1.1.1，</p>
+<p>在 Clash Premium 2022.04.17 之前的版本中必须写明<strong>所有</strong>的系统&#x2F;局域网 DNS 以劫持，进而才能让 Clash 中配置的 DNS 接管。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>全新安装&#x2F;替换安装，会遭遇“文件已损坏”的问题。执行下面的命令，可以解决这个问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo xattr -r -d com.apple.quarantine /Applications/Clash\ <span class="keyword">for</span>\ Windows.app</span><br></pre></td></tr></table></figure>
+
+<p>需要 sudo 权限</p>
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>节点&#x2F;策略&#x2F;规则，就用订阅转换</p>
+<p>其他配置使用 mixin 进行覆盖配置</p>
+<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><h3 id="General-x3D-gt-Port-为-0，而不是默认的-7890"><a href="#General-x3D-gt-Port-为-0，而不是默认的-7890" class="headerlink" title="General &#x3D;&gt; Port 为 0，而不是默认的 7890"></a>General &#x3D;&gt; Port 为 0，而不是默认的 7890</h3><p>使用管理员权限执行下列命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">net</span> stop winnat</span><br><span class="line">netsh int ipv4 add excludedportrange protocol=tcp startport=<span class="number">7890</span> numberofports=<span class="number">1</span></span><br><span class="line"><span class="built_in">net</span> <span class="built_in">start</span> winnat</span><br></pre></td></tr></table></figure>
+
+<h3 id="Service-Mode-无法安装"><a href="#Service-Mode-无法安装" class="headerlink" title="Service Mode 无法安装"></a>Service Mode 无法安装</h3><ol>
+<li><p>确保系统安装了 .NET Framework Runtime</p>
+</li>
+<li><p>点击 General 中的 Home Directory 打开文件夹，进入 service 子目录中。并使用管理员权限执行下列代码</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service.exe install</span><br><span class="line">service.exe <span class="built_in">start</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启 Clash for Windows</p>
+</li>
+</ol>
+<h3 id="tun-stack-设置为-system-会导致-tun-无法正常工作"><a href="#tun-stack-设置为-system-会导致-tun-无法正常工作" class="headerlink" title="tun.stack 设置为 system 会导致 tun 无法正常工作"></a>tun.stack 设置为 system 会导致 tun 无法正常工作</h3><p>设置为 gvisor 后，正常工作。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Fndroid/clash_for_windows_pkg/issues/1936">不同设备 gvisor 与 system 产生极其反差的性能表现 </a></li>
+</ul>
+<h2 id="控制面板"><a href="#控制面板" class="headerlink" title="控制面板"></a>控制面板</h2><p>General &#x3D;&gt; Clash Core &#x3D;&gt; 点击版本号，可唤起 clash.razord.top 的控制面板。</p>
+<p>但假如是全新的登陆，默认的端口号和密码是错误的，或为空。需要重新配置，不然无法进入控制面板。</p>
+<p>而端口号和密码，在浏览器地址栏中的参数中可以找到。</p>
+<ul>
+<li>端口： port</li>
+<li>密码： secret</li>
+</ul>
+<p>复制粘贴具体的参数值即可。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io">Xu Quentin Yang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io/2022/04/23/guide-clash-for-windows/">https://quentinhsu.github.io/2022/04/23/guide-clash-for-windows/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://quentinhsu.github.io" target="_blank">Xu Quentin Yang's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/network/">network</a><a class="post-meta__tags" href="/tags/proxy/">proxy</a><a class="post-meta__tags" href="/tags/clash/">clash</a><a class="post-meta__tags" href="/tags/config/">config</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/04/19/multiple-workspace-config-for-git/"><img class="next-cover" src="https://git-scm.com/images/branching-illustration@2x.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Git 的多工作区配置</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img class="cover" src="https://git-scm.com/images/branching-illustration@2x.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-19</div><div class="title">Git 的多工作区配置</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/blog-info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xu Quentin Yang</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/QuentinHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里不过是些只言片语，备忘录。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Clash-for-Windows"><span class="toc-number">1.</span> <span class="toc-text">Clash for Windows</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mixin"><span class="toc-number">1.1.1.</span> <span class="toc-text">mixin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#macOS"><span class="toc-number">1.2.</span> <span class="toc-text">macOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows"><span class="toc-number">1.3.</span> <span class="toc-text">Windows</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#General-x3D-gt-Port-%E4%B8%BA-0%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E9%BB%98%E8%AE%A4%E7%9A%84-7890"><span class="toc-number">1.3.1.</span> <span class="toc-text">General &#x3D;&gt; Port 为 0，而不是默认的 7890</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service-Mode-%E6%97%A0%E6%B3%95%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.2.</span> <span class="toc-text">Service Mode 无法安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tun-stack-%E8%AE%BE%E7%BD%AE%E4%B8%BA-system-%E4%BC%9A%E5%AF%BC%E8%87%B4-tun-%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text">tun.stack 设置为 system 会导致 tun 无法正常工作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%9D%BF"><span class="toc-number">1.4.</span> <span class="toc-text">控制面板</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows"><img src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[Guide] Clash for Windows"/></a><div class="content"><a class="title" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows">[Guide] Clash for Windows</a><time datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 的多工作区配置"/></a><div class="content"><a class="title" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置">Git 的多工作区配置</a><time datetime="2022-04-19T00:00:00.000Z" title="发表于 2022-04-19 00:00:00">2022-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升"><img src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 的提升"/></a><div class="content"><a class="title" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升">JavaScript 的提升</a><time datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当动态参数路由遇上通配符匹配路由"/></a><div class="content"><a class="title" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由">当动态参数路由遇上通配符匹配路由</a><time datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"/></a><div class="content"><a class="title" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</a><time datetime="2022-03-24T00:00:00.000Z" title="发表于 2022-03-24 00:00:00">2022-03-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Xu Quentin Yang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

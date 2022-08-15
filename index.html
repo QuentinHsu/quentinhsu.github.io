@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Xu Quentin Yang's Blog</title><meta name="author" content="Xu Quentin Yang"><meta name="copyright" content="Xu Quentin Yang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Xu Quentin Yang&#39;s Blog">
+<meta property="og:url" content="https://quentinhsu.github.io/index.html">
+<meta property="og:site_name" content="Xu Quentin Yang&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://quentinhsu.github.io/images/blog-info/avatar.png">
+<meta property="article:author" content="Xu Quentin Yang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://quentinhsu.github.io/images/blog-info/avatar.png"><link rel="shortcut icon" href="/images/blog-info/favicon.png"><link rel="canonical" href="https://quentinhsu.github.io/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离上次更新已经过了","messageNext":"天，文章所述内容可能已过时，请留意。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Xu Quentin Yang\'s Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-08-15 07:11:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/blog-info/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/hexo_index_img_202203011600959.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Xu Quentin Yang's Blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Xu Quentin Yang's Blog</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/QuentinHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows"><img class="post_bg" src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[Guide] Clash for Windows"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows">[Guide] Clash for Windows</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time></span></div><div class="content">Clash for Windows
+GitHub
+Documentation
+
+配置mixin基本配置：
+123456789101112131415161718192021222324mixin: # object  dns:    enable: true    ipv6: false # default is false    # listen: 0.0.0.0:53    enhanced-mode: redir-host    nameserver:      - https://dns.alidns.com/dns-query    fallback:      - https:/********.d.adguard-dns.com/dns-query    fallback-filter:      geoip: true      geoip-code: CN      ipcidr:        - 240.0.0.0/4  tun:    enable: true    stack: system    dns-hijack: # DNS 劫持      - any ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img class="post_bg" src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 的多工作区配置"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置">Git 的多工作区配置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-04-19T00:00:00.000Z" title="发表于 2022-04-19 00:00:00">2022-04-19</time></span></div><div class="content">Git 的多工作区配置为了在一台设备上，配置不同工作区路径下使用不同 Git 账号，可以使用接下来所属的方式一劳永逸以实现。
+includeIf该方式，在不同的平台上，就只有路径写法的不同
+macOS/Users/&lt;username&gt;/.gitconfig 文件中写入如下配置内容
+123456789101112# GitHub[includeIf &quot;gitdir:~/Work-Space/Personal/GitHub/&quot;]	path = .gitconfig-github# JihuLab[includeIf &quot;gitdir:~/Work-Space/Personal/JiHuLab/&quot;]	path = .gitconfig-jihulab# Wrok## your work path[includeIf &quot;gitdir:~/Work-Space/Company/xxx/&quot;]	path = .gitconfig-company-xxx
+
+
+其中 gitdir:~/Work-Space/Personal/GitHu ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升"><img class="post_bg" src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 的提升"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升">JavaScript 的提升</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time></span></div><div class="content">JavaScript 的提升最近在回顾 JavaScript 的基础。
+于是碰到了 提升 这个概念
+关于，提升，一直有印象的，就是 var 这个变量提升。
+
+提示：每个作用域都会有“提升”操作，提升操作会将变量提升到作用域的顶部。
+
+var 的提升使用 var 声明的变量，会在所有的作用域中提升。
+
+基本
+12var a = &#x27;a001&#x27;console.log(a) // a001
+
+先打印，接着声明，赋值
+12console.log(b) // undefined. ReferenceError: b is not definedvar b = &#x27;b001&#x27;
+
+在编译器中等价于
+123var bconsole.log(b) // undefined. ReferenceError: b is not definedb = &#x27;b001&#x27;
+
+重复声明并赋值
+123var c = &#x27;c001&#x27;var c = &#x27;c002&#x27;console.log(c) // c002
+
+
+但是你假如对使用 le ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由"><img class="post_bg" src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当动态参数路由遇上通配符匹配路由"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由">当动态参数路由遇上通配符匹配路由</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time></span></div><div class="content">当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。最近在重开前端，所以在重新学习 VueRouter，但在学习的过程中，我发现了个问题：
+大致情况当动态参数路由 A 和通配符匹配路由 B，是这样的关系时，通配符匹配路由 B 可能会失效。具体的情况&#x2F;条件是：
+
+当动态参数路由 A 和通配符匹配路由 B，路由 A 的 path 为 /a/:id，通配符匹配路由 B 的 path 为 /a/* (或是 /a/content-*)
+
+且上述两个路由配置是在 routes 这个数组对象的同一级。此情况目前有两种：
+
+默认的路由，即 routes 数组中的两个路由配置是在同一级。
+123456789101112const routes = [  //.....  &#123;    path: &#x27;/a/:id&#x27; // 路由 A    // ......  &#125;,  &#123;    path: &#x27;/a/*&#x27; // 路由 B    // ......  &#125;  // ......]
+
+有嵌套路由，且这两类型的路由处于同一个 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img class="post_bg" src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-24T00:00:00.000Z" title="发表于 2022-03-24 00:00:00">2022-03-24</time></span></div><div class="content">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错在实际用户使用的情况里，有当前路由 push 跳转当前路由的情况（闲着没事，重复点击）。
+但这时候 VueRouter 会认为这是不对的！因为是冗余的！（有点直男）
+啪！报错！
+
+解决基于用户至上，还是要解决这个问题
+123456// 解决“重复点击路由”/“当前路由跳当前路由”而报错的问题const originalPush = VueRouter.prototype.pushVueRouter.prototype.push = function push(location) &#123;  return originalPush.call(this, location).catch(err =&gt; err)&#125;// 在 new VueRouter 之前加
+
+上述方法是一次性捕获并抛出了所有的错误。
+但是为了防止一些未知的错误未能被发现，当前还是仅仅处理 push 方法上的“重复导航”的错误。
+12345678910111213141516171819202122const originalPush  ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/02/02/common-linux-commands/" title="常用 Linux 命令"><img class="post_bg" src="https://www.journaldev.com/wp-content/uploads/2020/01/Top_50_Linux_Commands-1.png.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常用 Linux 命令"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/02/02/common-linux-commands/" title="常用 Linux 命令">常用 Linux 命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-02T00:00:00.000Z" title="发表于 2022-02-02 00:00:00">2022-02-02</time></span></div><div class="content">文件操作cat
+直接打印文件内容到终端
+1cat README.md
+
+输出：
+1# Build Hexo Pages%
+
+创建文件
+1cat &gt; doc/README.md
+
+
+仅仅只能在已存在的目录下创建文件，不能在不存在的目录下创建文件。
+
+
+合并文件，将 A 文件（和其他文件）内容追加到 文件 B 内容末行末尾。
+
+若文件 B 不存在，则会被创建。
+内容格式保持不变。仅被复制的文件内容之间会直接拼接。
+
+123cat A &gt;&gt; Bcat A C &gt;&gt; Bcat README.md &gt;&gt; source/README.md
+
+echo
+将输入的内容输出到终端
+1echo &quot;Hello World&quot;
+
+示例：
+12$ echo &quot;Hello World&quot;Hello World
+
+将输入的内容追加到文件末尾
+1echo &quot;Hello World&quot; &gt;&gt; README.md
+
+创建文件
+1echo &gt; doc/README.md
+
+
+仅仅只能在已存在的目录下创建文件，不 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2021/08/20/page-layouts/" title="页面布局"><img class="post_bg" src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/page-layout-202204151436846.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="页面布局"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/08/20/page-layouts/" title="页面布局">页面布局</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-20T00:00:00.000Z" title="发表于 2021-08-20 00:00:00">2021-08-20</time></span></div><div class="content">REM 布局动态计算 HTML 根节点字体大小 + postcss-plugin-px2rem 插件
+
+计算根节点字体大小
+public/index.html
+1234567891011121314151617181920212223242526&lt;script&gt;  function calculateSize() &#123;    let clientWidth =      document.documentElement.getBoundingClientRect().width ||      document.documentElement.clientWidth    // 750 = 设计稿最大宽度值（px）    if (clientWidth &gt;= 750) &#123;      clientWidth = 750    &#125;    // 7.5 = 设计稿最大宽度值（px）/ postcss-plugin-px2rem 插件的 rootValue 值 =&gt; 750 / 100    let htmlSize = clientWidt ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2021/07/09/common-git-commands/" title="常用 Git 命令"><img class="post_bg" src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常用 Git 命令"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/07/09/common-git-commands/" title="常用 Git 命令">常用 Git 命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-07-09T00:00:00.000Z" title="发表于 2021-07-09 00:00:00">2021-07-09</time></span></div><div class="content">开始一个工作区（参见：git help tutorial）clone：克隆仓库到一个新目录
+默认
+1git clone &lt;remote-url&gt;
+
+重命名本地仓库文件夹名
+1git clone &lt;remote-url&gt; &lt;new-local-folder-name&gt;
+
+克隆指定分支
+1git clone -b &lt;branch-name&gt; &lt;remote-url&gt;
+
+init：创建一个空的 Git 仓库或重新初始化一个已存在的仓库该命令不需要 Git Config 中的 user.name 、 user.email 。
+在当前变更上工作（参见：git help everyday）add：添加文件内容至索引mv：移动或重命名一个文件、目录或符号链接Git 对文件名大小写不敏感。
+
+如需修改文件名（包含文件类型后缀），需要这样做：
+1git mv &lt;old-file-path&gt; &lt;new-file-path&gt;
+
+将目录 A 下所有文件夹&#x2F;文件移动到目录 B 下：
+1234git mv &lt;fol ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/blog-info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xu Quentin Yang</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/QuentinHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里不过是些只言片语，备忘录。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows"><img src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[Guide] Clash for Windows"/></a><div class="content"><a class="title" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows">[Guide] Clash for Windows</a><time datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 的多工作区配置"/></a><div class="content"><a class="title" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置">Git 的多工作区配置</a><time datetime="2022-04-19T00:00:00.000Z" title="发表于 2022-04-19 00:00:00">2022-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升"><img src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 的提升"/></a><div class="content"><a class="title" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升">JavaScript 的提升</a><time datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当动态参数路由遇上通配符匹配路由"/></a><div class="content"><a class="title" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由">当动态参数路由遇上通配符匹配路由</a><time datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"/></a><div class="content"><a class="title" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</a><time datetime="2022-03-24T00:00:00.000Z" title="发表于 2022-03-24 00:00:00">2022-03-24</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/android/" style="font-size: 1.1em; color: #999">android</a> <a href="/tags/clash/" style="font-size: 1.1em; color: #999">clash</a> <a href="/tags/command/" style="font-size: 1.5em; color: #99a9bf">command</a> <a href="/tags/common/" style="font-size: 1.5em; color: #99a9bf">common</a> <a href="/tags/config/" style="font-size: 1.5em; color: #99a9bf">config</a> <a href="/tags/css/" style="font-size: 1.1em; color: #999">css</a> <a href="/tags/function/" style="font-size: 1.1em; color: #999">function</a> <a href="/tags/git/" style="font-size: 1.5em; color: #99a9bf">git</a> <a href="/tags/hoist/" style="font-size: 1.1em; color: #999">hoist</a> <a href="/tags/javascript/" style="font-size: 1.1em; color: #999">javascript</a> <a href="/tags/layout%EF%BC%8Crem/" style="font-size: 1.1em; color: #999">layout，rem</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/macOS/" style="font-size: 1.1em; color: #999">macOS</a> <a href="/tags/mobile/" style="font-size: 1.1em; color: #999">mobile</a> <a href="/tags/network/" style="font-size: 1.1em; color: #999">network</a> <a href="/tags/proxy/" style="font-size: 1.1em; color: #999">proxy</a> <a href="/tags/variables/" style="font-size: 1.1em; color: #999">variables</a> <a href="/tags/vue/" style="font-size: 1.5em; color: #99a9bf">vue</a> <a href="/tags/vuerouter/" style="font-size: 1.5em; color: #99a9bf">vuerouter</a> <a href="/tags/wechat/" style="font-size: 1.1em; color: #999">wechat</a> <a href="/tags/windows/" style="font-size: 1.1em; color: #999">windows</a> <a href="/tags/workspace/" style="font-size: 1.1em; color: #999">workspace</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/03/"><span class="card-archive-list-date">三月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">二月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/08/"><span class="card-archive-list-date">八月 2021</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/07/"><span class="card-archive-list-date">七月 2021</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">8</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-08-15T07:11:38.156Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Xu Quentin Yang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

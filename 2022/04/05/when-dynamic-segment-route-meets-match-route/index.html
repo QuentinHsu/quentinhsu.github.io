@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>当动态参数路由遇上通配符匹配路由 | Xu Quentin Yang's Blog</title><meta name="keywords" content="vue,vuerouter"><meta name="author" content="Xu Quentin Yang"><meta name="copyright" content="Xu Quentin Yang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。最近在重开前端，所以在重新学习 VueRouter，但在学习的过程中，我发现了个问题： 大致情况当动态参数路由 A 和通配符匹配路由 B，是这样的关系时，通配符匹配路由 B 可能会失效。具体的情况&#x2F;条件是：  当动态参数路由 A 和通配符匹配路由 B，路由 A 的 path 为 &#x2F;a&#x2F;:id，通配符匹配路由 B 的 path 为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当动态参数路由遇上通配符匹配路由">
+<meta property="og:url" content="https://quentinhsu.github.io/2022/04/05/when-dynamic-segment-route-meets-match-route/index.html">
+<meta property="og:site_name" content="Xu Quentin Yang&#39;s Blog">
+<meta property="og:description" content="当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。最近在重开前端，所以在重新学习 VueRouter，但在学习的过程中，我发现了个问题： 大致情况当动态参数路由 A 和通配符匹配路由 B，是这样的关系时，通配符匹配路由 B 可能会失效。具体的情况&#x2F;条件是：  当动态参数路由 A 和通配符匹配路由 B，路由 A 的 path 为 &#x2F;a&#x2F;:id，通配符匹配路由 B 的 path 为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://router.vuejs.org/logo.png">
+<meta property="article:published_time" content="2022-04-05T00:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-15T07:11:03.334Z">
+<meta property="article:author" content="Xu Quentin Yang">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="vuerouter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://router.vuejs.org/logo.png"><link rel="shortcut icon" href="/images/blog-info/favicon.png"><link rel="canonical" href="https://quentinhsu.github.io/2022/04/05/when-dynamic-segment-route-meets-match-route/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离上次更新已经过了","messageNext":"天，文章所述内容可能已过时，请留意。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '当动态参数路由遇上通配符匹配路由',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-15 07:11:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/blog-info/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://router.vuejs.org/logo.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Xu Quentin Yang's Blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">当动态参数路由遇上通配符匹配路由</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-15T07:11:03.334Z" title="更新于 2022-08-15 07:11:03">2022-08-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="当动态参数路由遇上通配符匹配路由"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。"><a href="#当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。" class="headerlink" title="当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。"></a>当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。</h1><p>最近在重开前端，所以在重新学习 VueRouter，但在学习的过程中，我发现了个问题：</p>
+<h2 id="大致情况"><a href="#大致情况" class="headerlink" title="大致情况"></a>大致情况</h2><p>当动态参数路由 A 和通配符匹配路由 B，是这样的关系时，通配符匹配路由 B 可能会失效。<br>具体的情况&#x2F;条件是：</p>
+<ol>
+<li><p>当动态参数路由 A 和通配符匹配路由 B，路由 A 的 path 为 <code>/a/:id</code>，通配符匹配路由 B 的 path 为 <code>/a/*</code> (或是 <code>/a/content-*</code>)</p>
+</li>
+<li><p>且上述两个路由配置是在 routes 这个数组对象的同一级。此情况目前有两种：</p>
+<ol>
+<li><p>默认的路由，即 routes 数组中的两个路由配置是在同一级。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  <span class="comment">//.....</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/a/:id&#x27;</span> <span class="comment">// 路由 A</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/a/*&#x27;</span> <span class="comment">// 路由 B</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>有嵌套路由，且这两类型的路由处于同一个 children 属性（嵌套路由）下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  <span class="comment">//.....</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/xxxx&#x27;</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/a&#x27;</span>,</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="attr">children</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">path</span>: <span class="string">&#x27;:id&#x27;</span> <span class="comment">// 路由 A</span></span><br><span class="line">        <span class="comment">// ......</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">path</span>: <span class="string">&#x27;content-*&#x27;</span> <span class="comment">// 路由 B</span></span><br><span class="line">        <span class="comment">// ......</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// ......</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ol>
+<p>在上述情形下，通配符匹配路由 B 配置会失效。无法正常匹配到预定的组件。只会匹配到路由 A 的组件。</p>
+<p>在几番尝试和推理后发现，这个问题的根本原因是：</p>
+<p>动态参数路由的集合范围在代码&#x2F;数学逻辑上是大于等于通配符路由的集合范围的。</p>
+<p>而路由的每次跳转，都会遍历一边 <code>routes</code> 这个路由数组对象，找到匹配的路由配置，然后匹配到相应的组件。</p>
+<p><strong>假如动态参数路由在通配符路由之前的话，那么会优先命中动态参数路由，而不会命中通配符路由。</strong></p>
+<p>亦可参考<a target="_blank" rel="noopener" href="https://v3.router.vuejs.org/zh/guide/essentials/dynamic-matching.html#%E5%8C%B9%E9%85%8D%E4%BC%98%E5%85%88%E7%BA%A7">匹配优先级</a>中所说的：</p>
+<blockquote>
+<p>有时候，同一个路径可以匹配多个路由，此时，匹配的优先级就按照路由的定义顺序：路由定义得越早，优先级就越高。</p>
+</blockquote>
+<h2 id="如何解决这个问题？"><a href="#如何解决这个问题？" class="headerlink" title="如何解决这个问题？"></a>如何解决这个问题？</h2><p><strong>为了避免这种情况，就需要将通配符路由放置在动态参数路由之前。</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io">Xu Quentin Yang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io/2022/04/05/when-dynamic-segment-route-meets-match-route/">https://quentinhsu.github.io/2022/04/05/when-dynamic-segment-route-meets-match-route/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://quentinhsu.github.io" target="_blank">Xu Quentin Yang's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vue/">vue</a><a class="post-meta__tags" href="/tags/vuerouter/">vuerouter</a></div><div class="post_share"><div class="social-share" data-image="https://router.vuejs.org/logo.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/04/07/javascript-hoist/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JavaScript 的提升</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/"><img class="next-cover" src="https://router.vuejs.org/logo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img class="cover" src="https://router.vuejs.org/logo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-24</div><div class="title">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/blog-info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xu Quentin Yang</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/QuentinHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里不过是些只言片语，备忘录。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BD%93%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E9%81%87%E4%B8%8A%E9%80%9A%E9%85%8D%E7%AC%A6%E5%8C%B9%E9%85%8D%E8%B7%AF%E7%94%B1%EF%BC%8C%E9%80%9A%E9%85%8D%E7%AC%A6%E5%8C%B9%E9%85%8D%E8%B7%AF%E7%94%B1%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%A4%B1%E6%95%88%E3%80%82"><span class="toc-number">1.</span> <span class="toc-text">当动态参数路由遇上通配符匹配路由，通配符匹配路由可能会失效。</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E8%87%B4%E6%83%85%E5%86%B5"><span class="toc-number">1.1.</span> <span class="toc-text">大致情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">如何解决这个问题？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows"><img src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[Guide] Clash for Windows"/></a><div class="content"><a class="title" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows">[Guide] Clash for Windows</a><time datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 的多工作区配置"/></a><div class="content"><a class="title" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置">Git 的多工作区配置</a><time datetime="2022-04-19T00:00:00.000Z" title="发表于 2022-04-19 00:00:00">2022-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升"><img src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 的提升"/></a><div class="content"><a class="title" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升">JavaScript 的提升</a><time datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当动态参数路由遇上通配符匹配路由"/></a><div class="content"><a class="title" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由">当动态参数路由遇上通配符匹配路由</a><time datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"/></a><div class="content"><a class="title" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</a><time datetime="2022-03-24T00:00:00.000Z" title="发表于 2022-03-24 00:00:00">2022-03-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Xu Quentin Yang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

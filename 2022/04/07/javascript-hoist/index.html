@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>JavaScript 的提升 | Xu Quentin Yang's Blog</title><meta name="keywords" content="javascript,hoist,variables,function"><meta name="author" content="Xu Quentin Yang"><meta name="copyright" content="Xu Quentin Yang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="JavaScript 的提升最近在回顾 JavaScript 的基础。 于是碰到了 提升 这个概念 关于，提升，一直有印象的，就是 var 这个变量提升。  提示：每个作用域都会有“提升”操作，提升操作会将变量提升到作用域的顶部。  var 的提升使用 var 声明的变量，会在所有的作用域中提升。  基本 12var a &#x3D; &amp;#x27;a001&amp;#x27;console.log(a) &#x2F;&#x2F; a0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 的提升">
+<meta property="og:url" content="https://quentinhsu.github.io/2022/04/07/javascript-hoist/index.html">
+<meta property="og:site_name" content="Xu Quentin Yang&#39;s Blog">
+<meta property="og:description" content="JavaScript 的提升最近在回顾 JavaScript 的基础。 于是碰到了 提升 这个概念 关于，提升，一直有印象的，就是 var 这个变量提升。  提示：每个作用域都会有“提升”操作，提升操作会将变量提升到作用域的顶部。  var 的提升使用 var 声明的变量，会在所有的作用域中提升。  基本 12var a &#x3D; &amp;#x27;a001&amp;#x27;console.log(a) &#x2F;&#x2F; a0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg">
+<meta property="article:published_time" content="2022-04-07T00:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-15T07:11:03.334Z">
+<meta property="article:author" content="Xu Quentin Yang">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="hoist">
+<meta property="article:tag" content="variables">
+<meta property="article:tag" content="function">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg"><link rel="shortcut icon" href="/images/blog-info/favicon.png"><link rel="canonical" href="https://quentinhsu.github.io/2022/04/07/javascript-hoist/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离上次更新已经过了","messageNext":"天，文章所述内容可能已过时，请留意。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JavaScript 的提升',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-15 07:11:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/blog-info/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Xu Quentin Yang's Blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JavaScript 的提升</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-15T07:11:03.334Z" title="更新于 2022-08-15 07:11:03">2022-08-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JavaScript 的提升"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="JavaScript-的提升"><a href="#JavaScript-的提升" class="headerlink" title="JavaScript 的提升"></a>JavaScript 的提升</h1><p>最近在回顾 JavaScript 的基础。</p>
+<p>于是碰到了 <strong>提升</strong> 这个概念</p>
+<p>关于，提升，一直有印象的，就是 <code>var</code> 这个变量提升。</p>
+<blockquote>
+<p>提示：<br>每个作用域都会有“提升”操作，提升操作会将变量提升到作用域的顶部。</p>
+</blockquote>
+<h2 id="var-的提升"><a href="#var-的提升" class="headerlink" title="var 的提升"></a><code>var</code> 的提升</h2><p>使用 <code>var</code> 声明的变量，会在所有的作用域中提升。</p>
+<ol>
+<li><p>基本</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&#x27;a001&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a) <span class="comment">// a001</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>先打印，接着声明，赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b) <span class="comment">// undefined. ReferenceError: b is not defined</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="string">&#x27;b001&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>在编译器中等价于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b) <span class="comment">// undefined. ReferenceError: b is not defined</span></span><br><span class="line">b = <span class="string">&#x27;b001&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重复声明并赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> c = <span class="string">&#x27;c001&#x27;</span></span><br><span class="line"><span class="keyword">var</span> c = <span class="string">&#x27;c002&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c) <span class="comment">// c002</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>但是你假如对使用 <code>let</code>&#x2F;<code>const</code> 声明的变量进行了重复声明，那么就会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c1 = <span class="string">&#x27;c1001&#x27;</span></span><br><span class="line"><span class="keyword">let</span> c1 = <span class="string">&#x27;c1002&#x27;</span> <span class="comment">// SyntaxError: Identifier &#x27;c1&#x27; has already been declared</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c1)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> c2 = <span class="string">&#x27;c2001&#x27;</span></span><br><span class="line"><span class="keyword">const</span> c2 = <span class="string">&#x27;c2002&#x27;</span> <span class="comment">// SyntaxError: Identifier &#x27;c2&#x27; has already been declared</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c2)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>先“赋值”，再声明</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="string">&#x27;d001&#x27;</span></span><br><span class="line"><span class="keyword">var</span> d</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d) <span class="comment">// d001</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仅“赋值”，就会变成 window 上的变量</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">e = <span class="string">&#x27;e001&#x27;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(e) <span class="comment">// e001。若后续同一作用域下代码无 `var e`，那这 `e` 便是 window.e 了。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">  e = <span class="string">&#x27;e002&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(e) <span class="comment">// e002。 跟上面的 `e`，是相同的情况</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// but</span></span><br><span class="line"><span class="keyword">if</span> (<span class="literal">false</span>) &#123;</span><br><span class="line">  e = <span class="string">&#x27;e003&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(e) <span class="comment">// undefined。 跟上面的两个 `e`，是不同的情况。因为不存在变量提升，代码也没有执行 if 块里的</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在函数中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">g</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> h = <span class="string">&#x27;h001&#x27;</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;in function&#x27;</span>, h) <span class="comment">// h001</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">g</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;in window&#x27;</span>, h) <span class="comment">// undefined。因为函数内部的变量，不会提升到作用域的顶部，因为该变量会在调用函数之后随即被销毁掉。</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="函数的提升"><a href="#函数的提升" class="headerlink" title="函数的提升"></a>函数的提升</h2><p>或许是好久没看概念，这两天看书发现：</p>
+<p>函数里也是有“提升”的。</p>
+<p>但仅限于函数声明会有提升，而函数表达式是不会提升的。</p>
+<blockquote>
+<p>函数声明会在任何代码执行之前先被读取并添加到执行上下文。这个过程叫作函数声明提升（ function declaration hoisting）。在执行代码时， JavaScript 引擎会先执行一遍扫描，把发现的函数声明提升到源代码树的顶部。因此即使函数定义出现在调用它们的代码之后，引擎也会把函数声明提升到顶部。</p>
+<p>– 《JavaScript 高级程序设计（第 4 版）》P297</p>
+</blockquote>
+<p>具体表现为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 没问题</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">sum</span>(<span class="number">10</span>, <span class="number">10</span>)) <span class="comment">// 20</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sum</span>(<span class="params">num1, num2</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> num1 + num2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是把上述的函数声明改为等价的函数表达式，那么执行的时候就会出错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">sum</span>(<span class="number">10</span>, <span class="number">10</span>)) <span class="comment">// Uncaught ReferenceError: sum is not defined</span></span><br><span class="line"><span class="keyword">let</span> sum = <span class="keyword">function</span> (<span class="params">num1, num2</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> num1 + num2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>哪怕是你换成用 <code>var</code> 声明的函数，也会出错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">sum</span>(<span class="number">10</span>, <span class="number">10</span>)) <span class="comment">// Uncaught ReferenceError: sum is not defined</span></span><br><span class="line"><span class="keyword">var</span> sum = <span class="keyword">function</span> (<span class="params">num1, num2</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> num1 + num2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除了“函数什么时候真正有定义”这个区别之外，这两种写法是等价的。</p>
+<h2 id="提升的优先级"><a href="#提升的优先级" class="headerlink" title="提升的优先级"></a>提升的优先级</h2><h3 id="重复的声明，将被忽略掉"><a href="#重复的声明，将被忽略掉" class="headerlink" title="重复的声明，将被忽略掉"></a>重复的声明，将被忽略掉</h3><p>先看点简单的例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">foo</span>()</span><br><span class="line"><span class="keyword">var</span> foo</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line">foo = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码执行的结果是：1</p>
+<p>在编译器中，被理解为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">foo</span>()</span><br><span class="line">foo = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：<code>foo()</code> 这里的 <code>foo</code> 只是一个函数名，不是<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Functions#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E">函数声明</a>。函数声明是包含函数名的。在此也可以理解为是个变量，函数变量。跟之后的 <code>var foo</code> 中的 <code>foo</code> 是相同的，同名变量。所以，后面的 <code>var foo</code> 将被忽略掉。因为是<strong>重复的声明</strong>。</p>
+</blockquote>
+<h3 id="函数声明会被提升到变量声明之前"><a href="#函数声明会被提升到变量声明之前" class="headerlink" title="函数声明会被提升到变量声明之前"></a>函数声明会被提升到变量声明之前</h3><p>再来看看这个例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a -1&#x27;</span>, a) <span class="comment">// a -1 f a()</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a() -2&#x27;</span>, <span class="title function_">a</span>()) <span class="comment">// 这里是先执行 a()，后打印返回值</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">a</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;函数 a&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`函数 a 2`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a -8&#x27;</span>, a) <span class="comment">// a -8 1</span></span><br><span class="line">a = <span class="number">3</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a() -10&#x27;</span>, <span class="title function_">a</span>()) <span class="comment">// a not a function，该错误会阻断后续的代码执行</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a -11&#x27;</span>, a)</span><br></pre></td></tr></table></figure>
+
+<h3 id="重复的声明，将被忽略掉-1"><a href="#重复的声明，将被忽略掉-1" class="headerlink" title="重复的声明，将被忽略掉"></a>重复的声明，将被忽略掉</h3><p>变量的值，只会在重新赋值后才会被改写。而重复的声明，会被忽略，并不会影响什么。</p>
+<p>援引自 tc39&#x2F;ecma262 中的阐述：<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-variable-statement">14.3.2 Variable Statement</a></p>
+<blockquote>
+<p>A variable defined by a VariableDeclaration with an Initializer is assigned the value of its Initializer’s AssignmentExpression when the VariableDeclaration is executed, not when the variable is created.</p>
+</blockquote>
+<ol>
+<li><p>变量的第一次声明，会被默认赋值为 <code>undefined</code>。假如接着赋值，那么就会覆盖掉默认值。</p>
+<ul>
+<li><p>var，let 只声明，不赋值，默认值为 <code>undefined</code>。</p>
+<ul>
+<li>除非是显式的赋值，否则变量的值，在非第一次执行变量声明时，是不会被赋值的。是无效的，会被编译器忽略掉。</li>
+</ul>
+</li>
+<li><p>const 必须声明并赋值（初始化），否则报错。</p>
+<ul>
+<li><p>只声明，不赋值。是无效的声明。</p>
+</li>
+<li><p>只声明，或再打印它： const 声明中缺少初始化器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b <span class="comment">// SyntaxError: Missing initializer in const declaration</span></span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">const</span> b</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b) <span class="comment">// SyntaxError: Missing initializer in const declaration</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当使用这个变量去赋值给其他变量的时候，会提示未定义</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b</span><br><span class="line"><span class="keyword">const</span> c = b <span class="comment">// ReferenceError: b is not defined</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>在 JavaScript 引擎里，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>被看作两个单独的语句</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="comment">// 编译阶段的任务</span></span><br><span class="line">a = <span class="number">2</span> <span class="comment">// 执行阶段的任务</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这意味着无论作用域中的声明出现在什么地方， 都将在代码本身被执行前首先进行处理。可以将这个过程形象地想象成所有的声明（（var）变量和函数（声明）） 会被“移动” 到各自作用域的最顶端， 这个过程被称为提升。</p>
+<p>声明本身会被提升， 而包括函数表达式的赋值在内的赋值操作并不会提升。</p>
+<p>要注意避免重复声明， 特别是当普通的 var 声明和函数声明混合在一起的时候， 否则会引起很多危险的问题！</p>
+<p>《你不知道的 JavaScript（上卷）》 4.4 小结</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io">Xu Quentin Yang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://quentinhsu.github.io/2022/04/07/javascript-hoist/">https://quentinhsu.github.io/2022/04/07/javascript-hoist/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://quentinhsu.github.io" target="_blank">Xu Quentin Yang's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/javascript/">javascript</a><a class="post-meta__tags" href="/tags/hoist/">hoist</a><a class="post-meta__tags" href="/tags/variables/">variables</a><a class="post-meta__tags" href="/tags/function/">function</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/04/19/multiple-workspace-config-for-git/"><img class="prev-cover" src="https://git-scm.com/images/branching-illustration@2x.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Git 的多工作区配置</div></div></a></div><div class="next-post pull-right"><a href="/2022/04/05/when-dynamic-segment-route-meets-match-route/"><img class="next-cover" src="https://router.vuejs.org/logo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">当动态参数路由遇上通配符匹配路由</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/images/blog-info/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Xu Quentin Yang</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/QuentinHsu" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里不过是些只言片语，备忘录。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript-%E7%9A%84%E6%8F%90%E5%8D%87"><span class="toc-number">1.</span> <span class="toc-text">JavaScript 的提升</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#var-%E7%9A%84%E6%8F%90%E5%8D%87"><span class="toc-number">1.1.</span> <span class="toc-text">var 的提升</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E6%8F%90%E5%8D%87"><span class="toc-number">1.2.</span> <span class="toc-text">函数的提升</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8D%87%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.3.</span> <span class="toc-text">提升的优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E7%9A%84%E5%A3%B0%E6%98%8E%EF%BC%8C%E5%B0%86%E8%A2%AB%E5%BF%BD%E7%95%A5%E6%8E%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">重复的声明，将被忽略掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E%E4%BC%9A%E8%A2%AB%E6%8F%90%E5%8D%87%E5%88%B0%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E4%B9%8B%E5%89%8D"><span class="toc-number">1.3.2.</span> <span class="toc-text">函数声明会被提升到变量声明之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E7%9A%84%E5%A3%B0%E6%98%8E%EF%BC%8C%E5%B0%86%E8%A2%AB%E5%BF%BD%E7%95%A5%E6%8E%89-1"><span class="toc-number">1.3.3.</span> <span class="toc-text">重复的声明，将被忽略掉</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows"><img src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[Guide] Clash for Windows"/></a><div class="content"><a class="title" href="/2022/04/23/guide-clash-for-windows/" title="[Guide] Clash for Windows">[Guide] Clash for Windows</a><time datetime="2022-04-23T00:00:00.000Z" title="发表于 2022-04-23 00:00:00">2022-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置"><img src="https://git-scm.com/images/branching-illustration@2x.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 的多工作区配置"/></a><div class="content"><a class="title" href="/2022/04/19/multiple-workspace-config-for-git/" title="Git 的多工作区配置">Git 的多工作区配置</a><time datetime="2022-04-19T00:00:00.000Z" title="发表于 2022-04-19 00:00:00">2022-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升"><img src="https://cdn.jsdelivr.net/gh/QuentinHsu/cdn/img/javascript-202204081405424.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 的提升"/></a><div class="content"><a class="title" href="/2022/04/07/javascript-hoist/" title="JavaScript 的提升">JavaScript 的提升</a><time datetime="2022-04-07T00:00:00.000Z" title="发表于 2022-04-07 00:00:00">2022-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当动态参数路由遇上通配符匹配路由"/></a><div class="content"><a class="title" href="/2022/04/05/when-dynamic-segment-route-meets-match-route/" title="当动态参数路由遇上通配符匹配路由">当动态参数路由遇上通配符匹配路由</a><time datetime="2022-04-05T00:00:00.000Z" title="发表于 2022-04-05 00:00:00">2022-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"><img src="https://router.vuejs.org/logo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错"/></a><div class="content"><a class="title" href="/2022/03/24/the-current-route-jumps-to-the-current-route-and-vue-router-will-report-an-error/" title="【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错">【导航故障】当前路由 push 跳转当前路由，VueRouter 会报错</a><time datetime="2022-03-24T00:00:00.000Z" title="发表于 2022-03-24 00:00:00">2022-03-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Xu Quentin Yang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
